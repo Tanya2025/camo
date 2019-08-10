@@ -1,14 +1,16 @@
-FROM node:8.4
+FROM ubuntu
 
-RUN mkdir -p /opt/camo/
-WORKDIR /opt/camo/
+RUN apt-get update && apt-get install -yq nodejs npm
 
-ADD package.json /opt/camo/
-ADD server.js /opt/camo/
-ADD mime-types.json /opt/camo/
+RUN mkdir /app
+WORKDIR /app
+
+ADD package.json /app/
+RUN npm install
+
+ADD server.js /app/
+ADD mime-types.json /app/
 
 EXPOSE 8081
-
-RUN npm install
 USER nobody
-CMD ["npm", "start"]
+CMD nodejs server.js
